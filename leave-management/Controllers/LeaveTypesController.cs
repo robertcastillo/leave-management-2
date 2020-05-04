@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace leave_management.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles ="Administrator")]
     public class LeaveTypesController : Controller
     {
         private readonly ILeaveTypeRepository _repo;
@@ -23,6 +23,7 @@ namespace leave_management.Controllers
             _repo = repo;
             _mapper = mapper;
         }
+        
         // GET: LeaveTypes
         public ActionResult Index()
         {
@@ -34,7 +35,7 @@ namespace leave_management.Controllers
         // GET: LeaveTypes/Details/5
         public ActionResult Details(int id)
         {
-            if (!_repo.isExists(id)) 
+            if (!_repo.isExists(id))
             {
                 return NotFound();
             }
@@ -57,14 +58,16 @@ namespace leave_management.Controllers
             try
             {
                 // TODO: Add insert logic here
-                if (!ModelState.IsValid) 
+                if (!ModelState.IsValid)
                 {
                     return View(model);
                 }
+
                 var leaveType = _mapper.Map<LeaveType>(model);
                 leaveType.DateCreated = DateTime.Now;
+
                 var isSuccess = _repo.Create(leaveType);
-                if (!isSuccess) 
+                if (!isSuccess)
                 {
                     ModelState.AddModelError("", "Something Went Wrong...");
                     return View(model);
@@ -82,7 +85,7 @@ namespace leave_management.Controllers
         // GET: LeaveTypes/Edit/5
         public ActionResult Edit(int id)
         {
-            if (!_repo.isExists(id)) 
+            if (!_repo.isExists(id))
             {
                 return NotFound();
             }
@@ -105,7 +108,8 @@ namespace leave_management.Controllers
                 }
                 var leaveType = _mapper.Map<LeaveType>(model);
                 var isSuccess = _repo.Update(leaveType);
-                if (!isSuccess) {
+                if (!isSuccess)
+                {
                     ModelState.AddModelError("", "Something Went Wrong...");
                     return View(model);
                 }
@@ -143,7 +147,8 @@ namespace leave_management.Controllers
             {
                 // TODO: Add delete logic here
                 var leavetype = _repo.FindById(id);
-                if (leavetype == null) {
+                if(leavetype == null)
+                {
                     return NotFound();
                 }
                 var isSuccess = _repo.Delete(leavetype);
